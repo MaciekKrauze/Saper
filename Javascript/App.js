@@ -30,16 +30,22 @@ if (ranking.best_hard.time !== 0){
 let col = 5;
 let row = 5;
 let mines = 5;
-for (let i = 0; i < row; i++) {
+for (let i = 1; i < row+1; i++) {
     let row = document.createElement("tr")
     document.getElementById("playfield").appendChild(row)
-    for (let j = 0; j < col; j++) {
+    for (let j = 1; j < col+1; j++) {
         let col = document.createElement("td");
 
+        let number = i * j;
+        let random = Math.floor(Math.random() * number) ;
 
-
-
-        col.innerText = "test";
+        if (mines < random){
+            mines--;
+            col.innerText = "flaga";
+        }
+        else {
+            col.innerText = "Nie flaga";
+        }
         row.appendChild(col)
     }
 }
