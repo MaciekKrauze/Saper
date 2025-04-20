@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../Styles/reset.css">
+    <link rel="stylesheet" href="../Styles/Minesweeper_index.css">
+</head>
+<body>
+    <header>
+        <h1><a href="#">Minigierki.pl</a></h1>
+        <nav>
+            <ul>
+                <li><a href="Minesweeper_index.html">Saper</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Saper</h2>
+            <form>
+                <div>
+                    <label>Poziom trudności</label>
+                    <select name="difficulty_level">
+                        <option value="easy" id="easy">Łatwy(9x9/10 min)</option>
+                        <option value="medium" id="medium">Średni(16x16/40 min)</option>
+                        <option value="hard" id="hard">Trudny(16x30/99 min)</option>
+                        <!--                    <option value="custom">Stwórz własny poziom trudności</option>-->
+                    </select>
+                </div>
+
+                <button type="submit">Nowa gra</button>
+            </form>
+            <p>Czas : 0</p>
+            <p>Miny : 0</p>
+        </section>
+        <section>
+            <h2>Obszar gry</h2>
+            <table id="playfield">
+
+            </table>
+
+        </section>
+        <section>
+            <h2>Rekordy</h2>
+            <table>
+                <tr>
+                    <th>Poziom trudności</th>
+                    <th>Najlepszy wynik</th>
+                    <th>Gracz</th>
+                </tr>
+                <tr>
+                    <td>easy</td>
+                    <td id="best_easy_time">-</td>
+                    <td id="best_east_user">-</td>
+                </tr>
+                <tr>
+                    <td>medium</td>
+                    <td id="best_medium_time">-</td>
+                    <td id="best_medium_user">-</td>
+                </tr>
+                <tr>
+                    <td>hard</td>
+                    <td id="best_hard_time">-</td>
+                    <td id="best_hard_user">-</td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <section>
+            <h2>Kod autorstwa Macieja Krauze 2025</h2>
+        </section>
+    </footer>
+
+<script type="module" src="../Javascript/App.js"></script>
+</body>
+</html>
