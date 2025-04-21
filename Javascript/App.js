@@ -27,9 +27,9 @@ if (ranking.best_hard.time !== 0){
 }
 
 
-let cols = 5;
-let rows = 5;
-let mines = 5;
+let cols = 9;
+let rows = 9;
+let mines = 10;
 
 let positions = [];
 for (let i = 0; i < rows; i++) {
@@ -50,15 +50,55 @@ for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
         let td = document.createElement("td");
 
-        let isMine = minePositions.some(pos => pos[0] === i && pos[1] === j);
-        td.innerText = isMine ? "💣" : "";
+        td.innerText = "";
 
+        td.addEventListener("click", () => {
+            if (check_if_bomb(i, j)) {
+                td.innerText = "💣";
+                alert("BUM!");
+                for (let k = 0; k < minePositions.length; k++) {
+                    let [x, y] = minePositions[k];
+                    let bombTd = document.querySelector(`#playField tr:nth-child(${x + 1}) td:nth-child(${y + 1})`);
+                    bombTd.innerText = "💣";
+                    bombTd.classList.add("revealed-bomb");
+                }
+            } else {
+
+                const bombsAround = count_bombs_around(i, j);
+                td.innerText = bombsAround > 0 ? bombsAround : "";
+                td.classList.add("revealed")
+            }
+        });
         tr.appendChild(td);
     }
-    document.getElementById("playfield").appendChild(tr);
+    document.getElementById("playField").appendChild(tr);
 }
 
 
+
+function check_if_bomb (x, y){
+    return minePositions.some(pos => pos[0] === x && pos[1] === y);
+}
+
+function count_bombs_around(x, y) {
+    let count = 0;
+    for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+            if (dx === 0 && dy === 0) continue; // pomiń środek (kliknięte pole)
+            let newX = x + dx;
+            let newY = y + dy;
+            if (
+                newX >= 0 && newX < rows &&
+                newY >= 0 && newY < cols &&
+                check_if_bomb(newX, newY)
+            ) {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
 
 
 // let el = document.createElement("div");
