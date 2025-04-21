@@ -27,29 +27,36 @@ if (ranking.best_hard.time !== 0){
 }
 
 
-let col = 5;
-let row = 5;
+let cols = 5;
+let rows = 5;
 let mines = 5;
-for (let i = 1; i < row+1; i++) {
-    let row = document.createElement("tr")
-    document.getElementById("playfield").appendChild(row)
-    for (let j = 1; j < col+1; j++) {
-        let col = document.createElement("td");
 
-        let number = i * j;
-        let random = Math.floor(Math.random() * number) ;
-
-        if (mines < random){
-            mines--;
-            col.innerText = "flaga";
-        }
-        else {
-            col.innerText = "Nie flaga";
-        }
-        row.appendChild(col)
+let positions = [];
+for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+        positions.push([i, j]);
     }
 }
 
+for (let i = positions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [positions[i], positions[j]] = [positions[j], positions[i]];
+}
+
+let minePositions = positions.slice(0, mines);
+
+for (let i = 0; i < rows; i++) {
+    let tr = document.createElement("tr");
+    for (let j = 0; j < cols; j++) {
+        let td = document.createElement("td");
+
+        let isMine = minePositions.some(pos => pos[0] === i && pos[1] === j);
+        td.innerText = isMine ? "💣" : "";
+
+        tr.appendChild(td);
+    }
+    document.getElementById("playfield").appendChild(tr);
+}
 
 
 
