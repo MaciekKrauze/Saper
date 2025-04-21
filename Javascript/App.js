@@ -1,15 +1,15 @@
-
 const difficulty_level = {
-    easy: { row: 9, col: 9, mines: 10, timer: 10 },
-    medium: { row: 16, col: 16, mines: 40, timer: 20 },
-    hard: { row: 16, col: 30, mines: 99, timer: 10 },
-    custom: { row: 1, col: 1, mines: 1, timer: 10 }
+    easy: { row: 9, col: 9, mines: 10, timer: 10 * 60 },
+    medium: { row: 16, col: 16, mines: 40, timer: 40 * 60 },
+    hard: { row: 16, col: 30, mines: 99, timer: 99 * 60 },
+    custom: { row: 1, col: 1, mines: 1, timer: 10 * 60 }
 };
-
 
 let rows, cols, mines, timer;
 let minePositions = [];
 let gameActive = false;
+let interval = null;
+let timeLeft = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     const defaultDifficulty = "easy";
@@ -19,11 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
     cols = defaultSettings.col;
     mines = defaultSettings.mines;
     timer = defaultSettings.timer;
+    timeLeft = timer;
+    document.getElementById("timer").textContent = timeLeft;
 
     clearPlayfield();
     game(rows, cols, mines, timer);
 
     document.querySelector('main section p:nth-of-type(2)').innerText = `Miny: ${mines}`;
+
+    displayRanking();
 });
 
 const select = document.getElementById("difficultySelect");
@@ -35,12 +39,10 @@ select.addEventListener("change", () => {
     cols = selectedSettings.col;
     mines = selectedSettings.mines;
     timer = selectedSettings.timer;
-
-    console.log(`Wybrano poziom: ${selectedValue}`);
-    console.log(`Wymiary: ${rows}x${cols}, Miny: ${mines}, Timer: ${timer}`);
+    timeLeft = timer;
+    document.getElementById("timer").textContent = timeLeft;
 
     clearPlayfield();
-
     game(rows, cols, mines, timer);
 
     document.querySelector('main section p:nth-of-type(2)').innerText = `Miny: ${mines}`;
@@ -56,9 +58,10 @@ document.getElementById("newGame").addEventListener("click", (e) => {
     cols = selectedSettings.col;
     mines = selectedSettings.mines;
     timer = selectedSettings.timer;
+    timeLeft = timer;
+    document.getElementById("timer").textContent = timeLeft;
 
     clearPlayfield();
-
     game(rows, cols, mines, timer);
 
     document.querySelector('main section p:nth-of-type(2)').innerText = `Miny: ${mines}`;
@@ -69,11 +72,15 @@ function clearPlayfield() {
     playField.innerHTML = "";
     gameActive = false;
     minePositions = [];
+    if (interval) {
+        clearInterval(interval);
+        interval = null;
+    }
 }
 
 function game(rows, cols, mines, timer) {
     gameActive = true;
-
+    let firstClick = true;
     let positions = [];
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
@@ -97,13 +104,20 @@ function game(rows, cols, mines, timer) {
             td.dataset.col = j;
 
             td.addEventListener("click", () => {
+
+                if (firstClick){
+                    firstClick = false;
+                    startTimer(timer);
+                }
+
                 if (!gameActive) return;
 
                 if (check_if_bomb(i, j)) {
                     td.innerText = "💣";
                     td.classList.add("revealed-bomb");
-                    gameOver(false);
-                } else {
+                    gameOver(false, select.value, timeLeft);
+                }
+                else {
                     check_further_fields(i, j);
                     checkWinCondition();
                 }
@@ -128,6 +142,21 @@ function game(rows, cols, mines, timer) {
         }
         playField.appendChild(tr);
     }
+}
+
+function startTimer(startTime) {
+    timeLeft = startTime;
+    document.getElementById("timer").textContent = timeLeft;
+    interval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").textContent = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            interval = null;
+            alert("Czas minął!");
+            gameOver(false, select.value, timeLeft);
+        }
+    }, 1000);
 }
 
 function check_if_bomb(x, y) {
@@ -185,8 +214,10 @@ function check_further_fields(x, y) {
     }
 }
 
-function gameOver(isWin) {
+function gameOver(isWin, difficulty, timeLeft) {
     gameActive = false;
+    clearInterval(interval);
+    interval = null;
 
     if (!isWin) {
         for (let [x, y] of minePositions) {
@@ -199,8 +230,7 @@ function gameOver(isWin) {
         setTimeout(() => {
             alert("BUM! Koniec gry!");
         }, 100);
-    }
-    else {
+    } else {
         for (let [x, y] of minePositions) {
             let bombTd = document.querySelector(`#playField tr:nth-child(${x + 1}) td:nth-child(${y + 1})`);
             bombTd.innerText = "🚩";
@@ -209,6 +239,26 @@ function gameOver(isWin) {
 
         setTimeout(() => {
             alert("Gratulacje! Wygrałeś!");
+
+            const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
+                best_easy: { time: 0, user: null },
+                best_medium: { time: 0, user: null },
+                best_hard: { time: 0, user: null }
+            };
+
+            const key = `best_${difficulty}`;
+
+            if (timeLeft > savedRanking[key].time) {
+                const name = prompt("Nowy rekord! Jak się nazywasz?");
+                savedRanking[key] = {
+                    time: timeLeft,
+                    user: name || "Anonim"
+                };
+
+                localStorage.setItem("ranking", JSON.stringify(savedRanking));
+                displayRanking();
+                alert("Rekord zapisany!");
+            }
         }, 100);
     }
 }
@@ -218,25 +268,24 @@ function checkWinCondition() {
     const revealedCells = document.querySelectorAll("#playField td.revealed").length;
 
     if (revealedCells === totalCells - mines) {
-        gameOver(true);
+        gameOver(true, select.value, timeLeft);
     }
 }
 
-const ranking = {
-    best_easy: { time: 0, user: null },
-    best_medium: { time: 0, user: null },
-    best_hard: { time: 0, user: null }
-};
+function displayRanking() {
+    const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
+        best_easy: { time: 0, user: null },
+        best_medium: { time: 0, user: null },
+        best_hard: { time: 0, user: null }
+    };
 
-if (ranking.best_easy.time !== 0){
-    document.getElementById('best_easy_time').innerText = ranking.best_easy.time;
-    document.getElementById('best_easy_user').innerText = ranking.best_easy.user;
-}
-if (ranking.best_medium.time !== 0){
-    document.getElementById('best_medium_time').innerText = ranking.best_medium.time;
-    document.getElementById('best_medium_user').innerText = ranking.best_medium.user;
-}
-if (ranking.best_hard.time !== 0){
-    document.getElementById('best_hard_time').innerText = ranking.best_hard.time;
-    document.getElementById('best_hard_user').innerText = ranking.best_hard.user;
+    for (let level of ["easy", "medium", "hard"]) {
+        const timeEl = document.getElementById(`best_${level}_time`);
+        const userEl = document.getElementById(`best_${level}_user`);
+
+        if (savedRanking[`best_${level}`].time !== 0) {
+            timeEl.innerText = savedRanking[`best_${level}`].time;
+            userEl.innerText = savedRanking[`best_${level}`].user;
+        }
+    }
 }
