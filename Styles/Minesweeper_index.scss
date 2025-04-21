@@ -19,11 +19,14 @@ body {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    gap: 2rem;
 
     section {
-
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
       #playField {
-
         display: flex;
         td {
           width: 2rem;
@@ -52,21 +55,21 @@ body {
 
 
 
-  @media (max-width: 768px) {
-    header,
-    main,
-    footer {
-      width: 95%;
-      flex-direction: column;
-      margin-top: 1rem;
-    }
-
-    main section #playField {
-      justify-content: center;
-      td {
-        width: 4em;
-        height:4rem;
-      }
-    }
-  }
+  //@media (max-width: 768px) {
+  //  header,
+  //  main,
+  //  footer {
+  //    width: 95%;
+  //    flex-direction: column;
+  //    margin-top: 1rem;
+  //  }
+  //
+  //  main section #playField {
+  //    justify-content: center;
+  //    td {
+  //      width: 4em;
+  //      height:4rem;
+  //    }
+  //  }
+  //}
 }
