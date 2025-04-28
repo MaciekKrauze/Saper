@@ -1,0 +1,401 @@
+/* Base mobile-first styles */
+body {
+  background-color: #f5f7fa;
+  font-family: "Roboto", sans-serif;
+  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 10px;
+}
+body header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+}
+body header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+body header h1 a {
+  color: #2980b9;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+body header h1 a:hover {
+  color: #3498db;
+}
+body header nav {
+  width: 100%;
+}
+body header nav ul {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+body header nav ul li a {
+  color: #34495e;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+body header nav ul li a:hover, body header nav ul li a:active {
+  background-color: #3498db;
+  color: white;
+}
+body main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+body main section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+body main section h2 {
+  font-size: 1.4rem;
+  color: #2980b9;
+  margin: 0;
+  text-align: center;
+}
+body main section form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+}
+body main section form div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+body main section form div label {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+body main section form div select {
+  padding: 0.7rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  width: 100%;
+  outline: none;
+}
+body main section form div select:focus {
+  border-color: #3498db;
+}
+body main section form button {
+  padding: 0.8rem;
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+body main section form button:hover, body main section form button:active {
+  background-color: #3498db;
+}
+body main section #timer, body main section #mines {
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  width: 100%;
+  text-align: center;
+}
+body main section#playField-section {
+  width: 100%;
+  padding: 1rem 0.5rem;
+  overflow-x: auto;
+}
+body main section #playField {
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  width: auto;
+}
+body main section #playField tr {
+  display: flex;
+}
+body main section #playField td {
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid #bdc3c7;
+  background-color: #ecf0f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+}
+body main section #playField td:hover, body main section #playField td:active {
+  background-color: #d6dbdf;
+}
+body main section #playField td.revealed {
+  background-color: #e8f4fc;
+}
+body main section #playField td.revealed-bomb {
+  background-color: #e74c3c;
+}
+body main section #playField td.flagged {
+  background-color: #f1c40f;
+}
+body main section #playField td.bombs-1 {
+  color: #3498db;
+}
+body main section #playField td.bombs-2 {
+  color: #2ecc71;
+}
+body main section #playField td.bombs-3 {
+  color: #e74c3c;
+}
+body main section #playField td.bombs-4 {
+  color: #9b59b6;
+}
+body main section #playField td.bombs-5 {
+  color: #f39c12;
+}
+body main section #playField td.bombs-6 {
+  color: #1abc9c;
+}
+body main section #playField td.bombs-7 {
+  color: #2c3e50;
+}
+body main section #playField td.bombs-8 {
+  color: #7f8c8d;
+}
+body main section table:not(#playField) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+body main section table:not(#playField) th, body main section table:not(#playField) td {
+  padding: 0.6rem;
+  text-align: center;
+  border-bottom: 1px solid #ecf0f1;
+}
+body main section table:not(#playField) th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+body main section table:not(#playField) tr:hover td {
+  background-color: #f8f9fa;
+}
+body footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  text-align: center;
+}
+body footer h2 {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+
+/* Tablet breakpoint */
+@media (min-width: 600px) {
+  body {
+    padding: 15px;
+  }
+  body header h1 {
+    font-size: 2.2rem;
+  }
+  body header nav ul li a {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+  body main {
+    gap: 2rem;
+  }
+  body main section {
+    padding: 1.5rem;
+    gap: 1.2rem;
+  }
+  body main section h2 {
+    font-size: 1.6rem;
+  }
+  body main section form {
+    max-width: 25rem;
+    margin: 0 auto;
+  }
+  body main section form div label {
+    font-size: 1rem;
+  }
+  body main section form div select {
+    font-size: 1rem;
+  }
+  body main section #timer, body main section #mines {
+    font-size: 1.1rem;
+    max-width: 20rem;
+    margin: 0 auto;
+  }
+  body main section #playField td {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.9rem;
+  }
+  body main section table:not(#playField) {
+    font-size: 1rem;
+    max-width: 30rem;
+    margin: 0 auto;
+  }
+  body footer h2 {
+    font-size: 0.9rem;
+  }
+}
+/* Desktop breakpoint */
+@media (min-width: 992px) {
+  body {
+    padding: 20px;
+  }
+  body header {
+    width: 50rem;
+    max-width: 100%;
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+  body header h1 {
+    font-size: 2.5rem;
+  }
+  body main {
+    width: 50rem;
+    max-width: 100%;
+    gap: 2.5rem;
+  }
+  body main section {
+    padding: 2rem;
+  }
+  body main section h2 {
+    font-size: 1.8rem;
+  }
+  body main section form {
+    gap: 1rem;
+    max-width: 30rem;
+  }
+  body main section form div {
+    gap: 0.5rem;
+  }
+  body main section form button {
+    width: auto;
+    padding: 0.8rem 1.5rem;
+  }
+  body main section #timer, body main section #mines {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+  body main section#playField-section {
+    padding: 2rem 1rem;
+  }
+  body main section #playField td {
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1rem;
+  }
+  body main section table:not(#playField) {
+    max-width: 40rem;
+  }
+  body main section table:not(#playField) th, body main section table:not(#playField) td {
+    padding: 0.8rem;
+  }
+  body footer {
+    width: 50rem;
+    max-width: 100%;
+    margin-top: 2rem;
+    padding: 1rem;
+  }
+  body footer h2 {
+    font-size: 1rem;
+  }
+}
+/* Larger desktop screens */
+@media (min-width: 1200px) {
+  main section #playField td {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+}
+/* Touch device optimizations */
+@media (hover: none) {
+  button:active,
+  select:active,
+  #playField td:active {
+    transform: scale(0.97);
+  }
+  #playField td {
+    /* Slightly larger touch targets on touchscreens */
+    min-width: 2rem;
+    min-height: 2rem;
+  }
+}
+/* iPhone SE and other small screens */
+@media (max-width: 374px) {
+  main section #playField td {
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 0.75rem;
+  }
+}
+/* Landscape orientation for mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding: 5px;
+  }
+  header {
+    padding: 0.3rem;
+  }
+  header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+  }
+  main {
+    gap: 0.8rem;
+  }
+  main section {
+    padding: 0.8rem;
+    gap: 0.5rem;
+  }
+  main section h2 {
+    font-size: 1.2rem;
+  }
+  main section #playField td {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  footer {
+    margin-top: 0.5rem;
+  }
+}
+
+/*# sourceMappingURL=Minesweeper_index.css.map */

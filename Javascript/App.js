@@ -1,7 +1,7 @@
 const difficulty_level = {
     easy: { row: 9, col: 9, mines: 10, timer: 10 * 60 },
     medium: { row: 16, col: 16, mines: 40, timer: 40 * 60 },
-    hard: { row: 16, col: 30, mines: 99, timer: 99 * 60 },
+    hard: { row:  30, col: 16, mines: 99, timer: 99 * 60 },
     custom: { row: 1, col: 1, mines: 1, timer: 10 * 60 }
 };
 
