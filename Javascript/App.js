@@ -113,7 +113,7 @@ function game(rows, cols, mines, timer) {
                 if (!gameActive) return;
 
                 if (check_if_bomb(i, j)) {
-                    td.innerText = "💣";
+                    td.innerHTML = '<i class="fas fa-bomb"></i>';
                     td.classList.add("revealed-bomb");
                     gameOver(false, select.value, timeLeft);
                 }
@@ -133,7 +133,7 @@ function game(rows, cols, mines, timer) {
                         td.innerText = "";
                     } else {
                         td.classList.add("flagged");
-                        td.innerText = "🚩";
+                        td.innerHTML = "<i class=\"fas fa-flag\"></i>";
                     }
                 }
             });
@@ -223,7 +223,7 @@ function gameOver(isWin, difficulty, timeLeft) {
         for (let [x, y] of minePositions) {
             let bombTd = document.querySelector(`#playField tr:nth-child(${x + 1}) td:nth-child(${y + 1})`);
             if (!bombTd.classList.contains("revealed-bomb")) {
-                bombTd.innerText = "💣";
+                bombTd.innerHTML = '<i class="fas fa-bomb"></i>';
                 bombTd.classList.add("revealed-bomb");
             }
         }
@@ -233,7 +233,7 @@ function gameOver(isWin, difficulty, timeLeft) {
     } else {
         for (let [x, y] of minePositions) {
             let bombTd = document.querySelector(`#playField tr:nth-child(${x + 1}) td:nth-child(${y + 1})`);
-            bombTd.innerText = "🚩";
+            bombTd.innerHTML = "<i class=\"fas fa-flag\"></i>";
             bombTd.classList.add("flagged");
         }
 
