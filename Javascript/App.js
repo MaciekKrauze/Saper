@@ -214,7 +214,7 @@ function check_further_fields(x, y) {
     }
 }
 
-function gameOver(isWin, difficulty, timeLeft) {
+async function gameOver(isWin, difficulty, timeLeft) {
     gameActive = false;
     clearInterval(interval);
     interval = null;
@@ -230,14 +230,15 @@ function gameOver(isWin, difficulty, timeLeft) {
         setTimeout(() => {
             alert("BUM! Koniec gry!");
         }, 100);
-    } else {
+    }
+    else {
         for (let [x, y] of minePositions) {
             let bombTd = document.querySelector(`#playField tr:nth-child(${x + 1}) td:nth-child(${y + 1})`);
             bombTd.innerHTML = "<i class=\"fas fa-flag\"></i>";
             bombTd.classList.add("flagged");
         }
 
-        setTimeout(() => {
+        setTimeout( async () => {
             alert("Gratulacje! Wygrałeś!");
 
             const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
@@ -255,9 +256,15 @@ function gameOver(isWin, difficulty, timeLeft) {
                     user: name || "Anonim"
                 };
 
-                localStorage.setItem("ranking", JSON.stringify(savedRanking));
-                displayRanking();
-                alert("Rekord zapisany!");
+                try {
+                    localStorage.setItem("ranking", JSON.stringify(savedRanking));
+                    displayRanking();
+                    alert("Rekord zapisany!");
+                }
+                catch (e) {
+                    console.error("Nie zapisano przez błąd " + e);
+                }
+
             }
         }, 100);
     }
@@ -273,19 +280,61 @@ function checkWinCondition() {
 }
 
 function displayRanking() {
-    const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
-        best_easy: { time: 0, user: null },
-        best_medium: { time: 0, user: null },
-        best_hard: { time: 0, user: null }
+    const getRankingData = () => {
+        return new Promise((resolve, reject) => {
+            try {
+                const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
+                    best_easy: { time: 0, user: null },
+                    best_medium: { time: 0, user: null },
+                    best_hard: { time: 0, user: null }
+                };
+                resolve(savedRanking);
+            } catch (error) {
+                reject(error);
+            }
+        });
     };
 
-    for (let level of ["easy", "medium", "hard"]) {
-        const timeEl = document.getElementById(`best_${level}_time`);
-        const userEl = document.getElementById(`best_${level}_user`);
+    const updateUI = (savedRanking) => {
+        return new Promise((resolve, reject) => {
+            try {
+                for (let level of ["easy", "medium", "hard"]) {
+                    const timeEl = document.getElementById(`best_${level}_time`);
+                    const userEl = document.getElementById(`best_${level}_user`);
 
-        if (savedRanking[`best_${level}`].time !== 0) {
-            timeEl.innerText = savedRanking[`best_${level}`].time;
-            userEl.innerText = savedRanking[`best_${level}`].user;
-        }
-    }
+                    if (savedRanking[`best_${level}`].time !== 0) {
+                        timeEl.innerText = savedRanking[`best_${level}`].time;
+                        userEl.innerText = savedRanking[`best_${level}`].user;
+                    }
+                }
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+    };
+
+    return getRankingData()
+        .then(updateUI)
+        .catch(error => {
+            console.error("Nie udało się zapisać przez błąd " + error.message);
+        });
 }
+
+//Funkcje tokenu CSRF
+// function generateCSRFToken() {
+//     const tokenLength = 32;
+//     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//     let token = '';
+//
+//     for (let i = 0; i < tokenLength; i++) {
+//         token += characters.charAt(Math.floor(Math.random() * characters.length));
+//     }
+//
+//     localStorage.setItem('csrfToken', token);
+//     return token;
+// }
+// function verifyCSRFToken(token) {
+//     const storedToken = localStorage.getItem('csrfToken');
+//     return token === storedToken;
+// }

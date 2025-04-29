@@ -1,7 +1,7 @@
 body {
   background-color: #f5f7fa;
   font-family: "Roboto", sans-serif;
-  color: #2c3e50;
+  color: #1a2634;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,12 +22,12 @@ body header h1 {
   text-align: center;
 }
 body header h1 a {
-  color: #2980b9;
+  color: #1a6aa3;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 body header h1 a:hover {
-  color: #3498db;
+  color: #0e5286;
 }
 body header nav {
   width: 100%;
@@ -75,7 +75,7 @@ body main section {
 }
 body main section h2 {
   font-size: 1.4rem;
-  color: #2980b9;
+  color: #1a6aa3;
   margin: 0;
   text-align: center;
 }
@@ -96,18 +96,18 @@ body main section form div label {
 }
 body main section form div select {
   padding: 0.7rem;
-  border: 1px solid #bdc3c7;
+  border: 1px solid #8c9aa5;
   border-radius: 4px;
   font-size: 0.9rem;
   width: 100%;
   outline: none;
 }
 body main section form div select:focus {
-  border-color: #3498db;
+  border-color: #1a6aa3;
 }
 body main section form button {
   padding: 0.8rem;
-  background-color: #2980b9;
+  background-color: #1a6aa3;
   color: white;
   border: none;
   border-radius: 4px;
@@ -119,13 +119,13 @@ body main section form button {
   margin-top: 0.5rem;
 }
 body main section form button:hover, body main section form button:active {
-  background-color: #3498db;
+  background-color: #0e5286;
 }
 body main section #timer, body main section #mines {
   font-size: 1rem;
   font-weight: 500;
   padding: 0.5rem;
-  background-color: #f8f9fa;
+  background-color: #f0f2f5;
   border-radius: 4px;
   width: 100%;
   text-align: center;
@@ -146,8 +146,8 @@ body main section #playField tr {
 body main section #playField td {
   width: 1.8rem;
   height: 1.8rem;
-  border: 1px solid #bdc3c7;
-  background-color: #ecf0f1;
+  border: 1px solid #8c9aa5;
+  background-color: #d9dde0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -158,41 +158,41 @@ body main section #playField td {
   font-size: 0.8rem;
 }
 body main section #playField td:hover, body main section #playField td:active {
-  background-color: #d6dbdf;
+  background-color: #bcc2c7;
 }
 body main section #playField td.revealed {
-  background-color: #e8f4fc;
+  background-color: #d9ebf7;
 }
 body main section #playField td.revealed-bomb {
-  background-color: #e74c3c;
+  background-color: #c0392b;
 }
 body main section #playField td.flagged {
-  background-color: #f1c40f;
-  color: blue;
+  background-color: #d4a815;
+  color: #00008B;
 }
 body main section #playField td.bombs-1 {
-  color: #3498db;
+  color: #0e5286;
 }
 body main section #playField td.bombs-2 {
-  color: #2ecc71;
+  color: #1a7c43;
 }
 body main section #playField td.bombs-3 {
-  color: #e74c3c;
+  color: #c0392b;
 }
 body main section #playField td.bombs-4 {
-  color: #9b59b6;
+  color: #7031a0;
 }
 body main section #playField td.bombs-5 {
-  color: #f39c12;
+  color: #d35400;
 }
 body main section #playField td.bombs-6 {
-  color: #1abc9c;
+  color: #117864;
 }
 body main section #playField td.bombs-7 {
-  color: #2c3e50;
+  color: #111b24;
 }
 body main section #playField td.bombs-8 {
-  color: #7f8c8d;
+  color: #424a4d;
 }
 body main section table:not(#playField) {
   width: 100%;
@@ -202,14 +202,14 @@ body main section table:not(#playField) {
 body main section table:not(#playField) th, body main section table:not(#playField) td {
   padding: 0.6rem;
   text-align: center;
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid #d9dde0;
 }
 body main section table:not(#playField) th {
-  background-color: #f8f9fa;
+  background-color: #f0f2f5;
   font-weight: 600;
 }
 body main section table:not(#playField) tr:hover td {
-  background-color: #f8f9fa;
+  background-color: #f0f2f5;
 }
 body footer {
   width: 100%;
@@ -221,7 +221,7 @@ body footer {
 }
 body footer h2 {
   font-size: 0.8rem;
-  color: #7f8c8d;
+  color: #4f5b5d;
 }
 
 @media (min-width: 600px) {

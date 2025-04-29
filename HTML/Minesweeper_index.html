@@ -5,78 +5,84 @@
     <meta name="description" content="Tutaj znajdziesz grę w sapera">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minigierki.pl - Saper</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../Styles/reset.css">
     <link rel="stylesheet" href="../Styles/Minesweeper_index.css">
+
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    <link rel="preload" href="../Styles/reset.css" as="style">
+    <link rel="preload" href="../Styles/Minesweeper_index.css" as="style">
 </head>
 <body>
-    <header>
-        <h1><a href="#">Minigierki.pl</a></h1>
-        <nav>
-            <ul>
-                <li><a href="Minesweeper_index.html">Saper</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>Saper</h2>
-            <form>
-                <div>
-                    <label for="difficultySelect">Poziom trudności</label>
-                    <select id="difficultySelect" name="difficulty_level">
-                        <option value="easy" id="easy">Łatwy(9x9/10 min)</option>
-                        <option value="medium" id="medium">Średni(16x16/40 min)</option>
-                        <option value="hard" id="hard">Trudny(16x30/99 min)</option>
-                        <!--                    <option value="custom">Stwórz własny poziom trudności</option>-->
-                    </select>
-                </div>
+<header>
+    <h1><a href="#">Minigierki.pl</a></h1>
+    <nav>
+        <ul>
+            <li><a href="Minesweeper_index.html">Saper</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section>
+        <h2>Saper</h2>
+        <form>
+            <div>
+                <label for="difficultySelect">Poziom trudności</label>
+                <select id="difficultySelect" name="difficulty_level">
+                    <option value="easy" id="easy">Łatwy(9x9/10 min)</option>
+                    <option value="medium" id="medium">Średni(16x16/40 min)</option>
+                    <option value="hard" id="hard">Trudny(16x30/99 min)</option>
+                    <!--                    <option value="custom">Stwórz własny poziom trudności</option>-->
+                </select>
+                <input type="hidden" id="csrf_token" name="csrf_token" value="">
+            </div>
 
-                <button type="submit" id="newGame">Nowa gra</button>
-            </form>
-            <p id="timer">Czas : 0</p>
-            <p id="mines">Miny : 0</p>
-        </section>
-        <section>
-            <h2>Obszar gry</h2>
-            <table id="playField">
+            <button type="submit" id="newGame">Nowa gra</button>
+        </form>
+        <p id="timer">Czas : 0</p>
+        <p id="mines">Miny : 0</p>
+    </section>
+    <section>
+        <h2>Obszar gry</h2>
+        <table id="playField">
 
-            </table>
+        </table>
 
-        </section>
-        <section>
-            <h2>Rekordy</h2>
-            <table>
-                <tr>
-                    <th>Poziom trudności</th>
-                    <th>Najlepszy wynik</th>
-                    <th>Gracz</th>
-                </tr>
-                <tr>
-                    <td>easy</td>
-                    <td id="best_easy_time">-</td>
-                    <td id="best_easy_user">-</td>
-                </tr>
-                <tr>
-                    <td>medium</td>
-                    <td id="best_medium_time">-</td>
-                    <td id="best_medium_user">-</td>
-                </tr>
-                <tr>
-                    <td>hard</td>
-                    <td id="best_hard_time">-</td>
-                    <td id="best_hard_user">-</td>
-                </tr>
-            </table>
-        </section>
-    </main>
-    <footer>
-        <section>
-            <h2>Kod autorstwa Macieja Krauze 2025</h2>
-        </section>
-    </footer>
+    </section>
+    <section>
+        <h2>Rekordy</h2>
+        <table>
+            <tr>
+                <th>Poziom trudności</th>
+                <th>Najlepszy wynik</th>
+                <th>Gracz</th>
+            </tr>
+            <tr>
+                <td>easy</td>
+                <td id="best_easy_time">-</td>
+                <td id="best_easy_user">-</td>
+            </tr>
+            <tr>
+                <td>medium</td>
+                <td id="best_medium_time">-</td>
+                <td id="best_medium_user">-</td>
+            </tr>
+            <tr>
+                <td>hard</td>
+                <td id="best_hard_time">-</td>
+                <td id="best_hard_user">-</td>
+            </tr>
+        </table>
+    </section>
+</main>
+<footer>
+    <section>
+        <h2>Kod autorstwa Macieja Krauze 2025</h2>
+    </section>
+</footer>
 
-<script type="module" src="../Javascript/App.js"></script>
+<!--<script type="module" src="../Javascript/App.js"></script>-->
+<script type="module" src="../Javascript/App.js" defer></script>
 </body>
 </html>

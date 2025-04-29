@@ -1,7 +1,7 @@
 body {
   background-color: #f5f7fa;
   font-family: 'Roboto', sans-serif;
-  color: #2c3e50;
+  color: #1a2634;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,12 +22,12 @@ body {
       text-align: center;
 
       a {
-        color: #2980b9;
+        color: #1a6aa3;
         text-decoration: none;
         transition: color 0.3s ease;
 
         &:hover {
-          color: #3498db;
+          color: #0e5286;
         }
       }
     }
@@ -83,7 +83,7 @@ body {
 
       h2 {
         font-size: 1.4rem;
-        color: #2980b9;
+        color: #1a6aa3;
         margin: 0;
         text-align: center;
       }
@@ -106,21 +106,21 @@ body {
 
           select {
             padding: 0.7rem;
-            border: 1px solid #bdc3c7;
+            border: 1px solid #8c9aa5;
             border-radius: 4px;
             font-size: 0.9rem;
             width: 100%;
             outline: none;
 
             &:focus {
-              border-color: #3498db;
+              border-color: #1a6aa3;
             }
           }
         }
 
         button {
           padding: 0.8rem;
-          background-color: #2980b9;
+          background-color: #1a6aa3;
           color: white;
           border: none;
           border-radius: 4px;
@@ -132,7 +132,7 @@ body {
           margin-top: 0.5rem;
 
           &:hover, &:active {
-            background-color: #3498db;
+            background-color: #0e5286;
           }
         }
       }
@@ -141,7 +141,7 @@ body {
         font-size: 1rem;
         font-weight: 500;
         padding: 0.5rem;
-        background-color: #f8f9fa;
+        background-color: #f0f2f5;
         border-radius: 4px;
         width: 100%;
         text-align: center;
@@ -165,8 +165,8 @@ body {
         td {
           width: 1.8rem;
           height: 1.8rem;
-          border: 1px solid #bdc3c7;
-          background-color: #ecf0f1;
+          border: 1px solid #8c9aa5;
+          background-color: #d9dde0;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -177,30 +177,30 @@ body {
           font-size: 0.8rem;
 
           &:hover, &:active {
-            background-color: #d6dbdf;
+            background-color: #bcc2c7;
           }
 
           &.revealed {
-            background-color: #e8f4fc;
+            background-color: #d9ebf7;
           }
 
           &.revealed-bomb {
-            background-color: #e74c3c;
+            background-color: #c0392b;
           }
 
           &.flagged {
-            background-color: #f1c40f;
-            color: blue;
+            background-color: #d4a815;
+            color: #00008B;
           }
 
-          &.bombs-1 { color: #3498db; }
-          &.bombs-2 { color: #2ecc71; }
-          &.bombs-3 { color: #e74c3c; }
-          &.bombs-4 { color: #9b59b6; }
-          &.bombs-5 { color: #f39c12; }
-          &.bombs-6 { color: #1abc9c; }
-          &.bombs-7 { color: #2c3e50; }
-          &.bombs-8 { color: #7f8c8d; }
+          &.bombs-1 { color: #0e5286; }
+          &.bombs-2 { color: #1a7c43; }
+          &.bombs-3 { color: #c0392b; }
+          &.bombs-4 { color: #7031a0; }
+          &.bombs-5 { color: #d35400; }
+          &.bombs-6 { color: #117864; }
+          &.bombs-7 { color: #111b24; }
+          &.bombs-8 { color: #424a4d; }
         }
       }
 
@@ -212,16 +212,16 @@ body {
         th, td {
           padding: 0.6rem;
           text-align: center;
-          border-bottom: 1px solid #ecf0f1;
+          border-bottom: 1px solid #d9dde0;
         }
 
         th {
-          background-color: #f8f9fa;
+          background-color: #f0f2f5;
           font-weight: 600;
         }
 
         tr:hover td {
-          background-color: #f8f9fa;
+          background-color: #f0f2f5;
         }
       }
     }
@@ -237,7 +237,7 @@ body {
 
     h2 {
       font-size: 0.8rem;
-      color: #7f8c8d;
+      color: #4f5b5d;
     }
   }
 }
