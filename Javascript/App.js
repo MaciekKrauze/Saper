@@ -1,6 +1,6 @@
 const difficulty_level = {
     easy: { row: 9, col: 9, mines: 10, timer: 10 * 60 },
-    medium: { row: 16, col: 16, mines: 40, timer: 40 * 60 },
+    medium: { row: 16, col: 16, mines: 1, timer: 40 * 60 },
     hard: { row:  30, col: 16, mines: 99, timer: 99 * 60 },
     custom: { row: 1, col: 1, mines: 1, timer: 10 * 60 }
 };
@@ -10,8 +10,13 @@ let minePositions = [];
 let gameActive = false;
 let interval = null;
 let timeLeft = 0;
+let csrfToken = '';
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    csrfToken = generateCSRFToken();
+    document.getElementById('csrf_token').value = csrfToken;
+
     const defaultDifficulty = "easy";
     const defaultSettings = difficulty_level[defaultDifficulty];
 
@@ -32,6 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const select = document.getElementById("difficultySelect");
 select.addEventListener("change", () => {
+
+    const formToken = document.getElementById('csrf_token').value;
+    if (!verifyCSRFToken(formToken)) {
+        alert("Nieprawidłowy token bezpieczeństwa. Strona zostanie odświeżona.");
+        location.reload();
+        return;
+    }
+
     const selectedValue = select.value;
     const selectedSettings = difficulty_level[selectedValue];
 
@@ -46,11 +59,21 @@ select.addEventListener("change", () => {
     game(rows, cols, mines, timer);
 
     document.querySelector('main section p:nth-of-type(2)').innerText = `Miny: ${mines}`;
+
+    csrfToken = generateCSRFToken();
+    document.getElementById('csrf_token').value = csrfToken;
 });
 
 document.getElementById("newGame").addEventListener("click", (e) => {
     e.preventDefault();
 
+    const formToken = document.getElementById('csrf_token').value;
+    if (!verifyCSRFToken(formToken)) {
+        alert("Nieprawidłowy token bezpieczeństwa. Strona zostanie odświeżona.");
+        location.reload();
+        return;
+    }
+
     const selectedValue = select.value;
     const selectedSettings = difficulty_level[selectedValue];
 
@@ -65,6 +88,9 @@ document.getElementById("newGame").addEventListener("click", (e) => {
     game(rows, cols, mines, timer);
 
     document.querySelector('main section p:nth-of-type(2)').innerText = `Miny: ${mines}`;
+
+    csrfToken = generateCSRFToken();
+    document.getElementById('csrf_token').value = csrfToken;
 });
 
 function clearPlayfield() {
@@ -251,9 +277,11 @@ async function gameOver(isWin, difficulty, timeLeft) {
 
             if (timeLeft > savedRanking[key].time) {
                 const name = prompt("Nowy rekord! Jak się nazywasz?");
+                const sanitizeName = (name) => name.replace(/[<>\/\\'"`]/g, '').substring(0, 30);
+                const safeName = sanitizeName(name);
                 savedRanking[key] = {
                     time: timeLeft,
-                    user: name || "Anonim"
+                    user: safeName || "Anonim"
                 };
 
                 try {
@@ -322,19 +350,19 @@ function displayRanking() {
 }
 
 //Funkcje tokenu CSRF
-// function generateCSRFToken() {
-//     const tokenLength = 32;
-//     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//     let token = '';
-//
-//     for (let i = 0; i < tokenLength; i++) {
-//         token += characters.charAt(Math.floor(Math.random() * characters.length));
-//     }
-//
-//     localStorage.setItem('csrfToken', token);
-//     return token;
-// }
-// function verifyCSRFToken(token) {
-//     const storedToken = localStorage.getItem('csrfToken');
-//     return token === storedToken;
-// }
+function generateCSRFToken() {
+    const tokenLength = 32;
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let token = '';
+
+    for (let i = 0; i < tokenLength; i++) {
+        token += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    localStorage.setItem('csrfToken', token);
+    return token;
+}
+function verifyCSRFToken(token) {
+    const storedToken = localStorage.getItem('csrfToken');
+    return token === storedToken;
+}
