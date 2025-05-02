@@ -12,6 +12,8 @@ let interval = null;
 let timeLeft = 0;
 let csrfToken = '';
 
+showWinnerForm()
+
 document.addEventListener('DOMContentLoaded', () => {
 
     csrfToken = generateCSRFToken();
@@ -264,7 +266,8 @@ async function gameOver(isWin, difficulty, timeLeft) {
             bombTd.classList.add("flagged");
         }
 
-        setTimeout( async () => {
+        setTimeout(async () => {
+            // Basic win notification
             alert("Gratulacje! Wygrałeś!");
 
             const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
@@ -276,23 +279,39 @@ async function gameOver(isWin, difficulty, timeLeft) {
             const key = `best_${difficulty}`;
 
             if (timeLeft > savedRanking[key].time) {
-                const name = prompt("Nowy rekord! Jak się nazywasz?");
-                const sanitizeName = (name) => name.replace(/[<>\/\\'"`]/g, '').substring(0, 30);
-                const safeName = sanitizeName(name);
-                savedRanking[key] = {
-                    time: timeLeft,
-                    user: safeName || "Anonim"
+                // Instead of prompt, show the custom form
+                showWinnerForm();
+
+                // Add event listener to the form to handle submission
+                const winForm = document.getElementById("win_form");
+                const form = winForm.querySelector("form");
+
+                form.onsubmit = function(e) {
+                    e.preventDefault();
+
+                    const nameInput = document.getElementById("username_text");
+                    const name = nameInput.value;
+                    const sanitizeName = (name) => name.replace(/[<>\/\\'"`]/g, '').substring(0, 30);
+                    const safeName = sanitizeName(name);
+
+                    savedRanking[key] = {
+                        time: timeLeft,
+                        user: safeName || "Anonim"
+                    };
+
+                    try {
+                        localStorage.setItem("ranking", JSON.stringify(savedRanking));
+                        displayRanking();
+
+                        // Hide the form after submission
+                        winForm.style.display = "none";
+
+                        alert("Rekord zapisany!");
+                    }
+                    catch (e) {
+                        console.error("Nie zapisano przez błąd " + e);
+                    }
                 };
-
-                try {
-                    localStorage.setItem("ranking", JSON.stringify(savedRanking));
-                    displayRanking();
-                    alert("Rekord zapisany!");
-                }
-                catch (e) {
-                    console.error("Nie zapisano przez błąd " + e);
-                }
-
             }
         }, 100);
     }
@@ -347,6 +366,50 @@ function displayRanking() {
         .catch(error => {
             console.error("Nie udało się zapisać przez błąd " + error.message);
         });
+}
+
+
+function showWinnerForm() {
+    let win_form = document.getElementById("win_form");
+
+    // Clear any existing content
+    win_form.innerHTML = '';
+
+    // Show the form
+    win_form.style.display = "block";
+
+    // Add a heading for context
+    let heading = document.createElement("h3");
+    heading.innerText = "Nowy rekord!";
+    win_form.appendChild(heading);
+
+    let form = document.createElement("form");
+    form.setAttribute("method", "POST");
+    form.setAttribute("action", "/");
+
+    let label = document.createElement("label");
+    label.innerText = "Podaj swoje imię:";
+    label.setAttribute("for", "username_text");
+    form.appendChild(label);
+
+    let input_name = document.createElement("input");
+    input_name.type = "text";
+    input_name.setAttribute("id", "username_text");
+    input_name.setAttribute("name", "username");
+    input_name.placeholder = "imię";
+    form.appendChild(input_name);
+
+    let button = document.createElement("button");
+    button.type = "submit";
+    button.innerText = "Zapisz rekord";
+    form.appendChild(button);
+
+    win_form.appendChild(form);
+
+    // Focus on the input field
+    setTimeout(() => {
+        input_name.focus();
+    }, 100);
 }
 
 //Funkcje tokenu CSRF
