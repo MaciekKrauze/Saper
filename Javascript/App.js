@@ -1,6 +1,6 @@
 const difficulty_level = {
-    easy: { row: 9, col: 9, mines: 10, timer: 10 * 60 },
-    medium: { row: 16, col: 16, mines: 1, timer: 40 * 60 },
+    easy: { row: 9, col: 9, mines: 1, timer: 10 * 60 },
+    medium: { row: 16, col: 16, mines: 20, timer: 40 * 60 },
     hard: { row:  30, col: 16, mines: 99, timer: 99 * 60 },
     custom: { row: 1, col: 1, mines: 1, timer: 10 * 60 }
 };
@@ -12,7 +12,7 @@ let interval = null;
 let timeLeft = 0;
 let csrfToken = '';
 
-showWinnerForm()
+// showWinnerForm()
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("timer").textContent = timeLeft;
 
     clearPlayfield();
+    hideResultSection();
     game(rows, cols, mines, timer);
 
     document.querySelector('main section p:nth-of-type(2)').innerText = `Miny: ${mines}`;
@@ -58,6 +59,7 @@ select.addEventListener("change", () => {
     document.getElementById("timer").textContent = timeLeft;
 
     clearPlayfield();
+    hideResultSection();
     game(rows, cols, mines, timer);
 
     document.querySelector('main section p:nth-of-type(2)').innerText = `Miny: ${mines}`;
@@ -87,6 +89,7 @@ document.getElementById("newGame").addEventListener("click", (e) => {
     document.getElementById("timer").textContent = timeLeft;
 
     clearPlayfield();
+    hideResultSection();
     game(rows, cols, mines, timer);
 
     document.querySelector('main section p:nth-of-type(2)').innerText = `Miny: ${mines}`;
@@ -104,6 +107,12 @@ function clearPlayfield() {
         clearInterval(interval);
         interval = null;
     }
+}
+
+function hideResultSection() {
+    const resultSection = document.getElementById("result");
+    resultSection.innerHTML = "";
+    resultSection.style.display = "none";
 }
 
 function game(rows, cols, mines, timer) {
@@ -169,6 +178,9 @@ function game(rows, cols, mines, timer) {
             tr.appendChild(td);
         }
         playField.appendChild(tr);
+
+        let win_form = document.getElementById("win_form");
+        win_form.setAttribute("style", "display: none;");
     }
 }
 
@@ -181,7 +193,7 @@ function startTimer(startTime) {
         if (timeLeft <= 0) {
             clearInterval(interval);
             interval = null;
-            alert("Czas minął!");
+            showResult(4)
             gameOver(false, select.value, timeLeft);
         }
     }, 1000);
@@ -255,9 +267,9 @@ async function gameOver(isWin, difficulty, timeLeft) {
                 bombTd.classList.add("revealed-bomb");
             }
         }
-        setTimeout(() => {
-            alert("BUM! Koniec gry!");
-        }, 100);
+
+        //Porazka przez wybuch
+        showResult(3);
     }
     else {
         for (let [x, y] of minePositions) {
@@ -267,9 +279,8 @@ async function gameOver(isWin, difficulty, timeLeft) {
         }
 
         setTimeout(async () => {
-            // Basic win notification
-            alert("Gratulacje! Wygrałeś!");
-
+            //Wygrana z rekordem
+            showResult(2);
             const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
                 best_easy: { time: 0, user: null },
                 best_medium: { time: 0, user: null },
@@ -279,10 +290,10 @@ async function gameOver(isWin, difficulty, timeLeft) {
             const key = `best_${difficulty}`;
 
             if (timeLeft > savedRanking[key].time) {
-                // Instead of prompt, show the custom form
+
                 showWinnerForm();
 
-                // Add event listener to the form to handle submission
+
                 const winForm = document.getElementById("win_form");
                 const form = winForm.querySelector("form");
 
@@ -303,15 +314,17 @@ async function gameOver(isWin, difficulty, timeLeft) {
                         localStorage.setItem("ranking", JSON.stringify(savedRanking));
                         displayRanking();
 
-                        // Hide the form after submission
                         winForm.style.display = "none";
 
-                        alert("Rekord zapisany!");
                     }
                     catch (e) {
                         console.error("Nie zapisano przez błąd " + e);
                     }
                 };
+            }
+            else{
+                //Podstawowa wygrana
+                showResult(1);
             }
         }, 100);
     }
@@ -327,58 +340,134 @@ function checkWinCondition() {
 }
 
 function displayRanking() {
-    const getRankingData = () => {
-        return new Promise((resolve, reject) => {
-            try {
-                const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
-                    best_easy: { time: 0, user: null },
-                    best_medium: { time: 0, user: null },
-                    best_hard: { time: 0, user: null }
-                };
-                resolve(savedRanking);
-            } catch (error) {
-                reject(error);
-            }
-        });
-    };
 
-    const updateUI = (savedRanking) => {
-        return new Promise((resolve, reject) => {
-            try {
-                for (let level of ["easy", "medium", "hard"]) {
-                    const timeEl = document.getElementById(`best_${level}_time`);
-                    const userEl = document.getElementById(`best_${level}_user`);
-
-                    if (savedRanking[`best_${level}`].time !== 0) {
-                        timeEl.innerText = savedRanking[`best_${level}`].time;
-                        userEl.innerText = savedRanking[`best_${level}`].user;
-                    }
+        const getRankingData = () => {
+            return new Promise((resolve, reject) => {
+                try {
+                    const savedRanking = JSON.parse(localStorage.getItem("ranking")) || {
+                        best_easy: { time: 0, user: null },
+                        best_medium: { time: 0, user: null },
+                        best_hard: { time: 0, user: null }
+                    };
+                    resolve(savedRanking);
+                } catch (error) {
+                    reject(error);
                 }
-                resolve();
-            } catch (error) {
-                reject(error);
-            }
-        });
-    };
+            });
+        };
+
+
+        const createTable = (savedRanking) => {
+            return new Promise((resolve, reject) => {
+                try {
+                    const recordsSection = document.getElementById("records");
+
+                    while (recordsSection.children.length > 1) { // Keep the h2 heading
+                        recordsSection.removeChild(recordsSection.lastChild);
+                    }
+
+                    const table = document.createElement("table");
+
+                    const headerRow = document.createElement("tr");
+
+                    const headers = ["Poziom trudności", "Najlepszy wynik", "Gracz"];
+                    headers.forEach(headerText => {
+                        const th = document.createElement("th");
+                        th.innerText = headerText;
+                        headerRow.appendChild(th);
+                    });
+
+                    table.appendChild(headerRow);
+
+                    const levels = [
+                        { id: "easy", name: "Łatwy" },
+                        { id: "medium", name: "Średni" },
+                        { id: "hard", name: "Trudny" }
+                    ];
+
+                    levels.forEach(level => {
+                        const row = document.createElement("tr");
+
+                        const levelCell = document.createElement("td");
+                        levelCell.innerText = level.name;
+                        row.appendChild(levelCell);
+
+                        const timeCell = document.createElement("td");
+                        timeCell.id = `best_${level.id}_time`;
+                        timeCell.innerText = savedRanking[`best_${level.id}`].time !== 0
+                            ? savedRanking[`best_${level.id}`].time
+                            : "-";
+                        row.appendChild(timeCell);
+
+                        const userCell = document.createElement("td");
+                        userCell.id = `best_${level.id}_user`;
+                        userCell.innerText = savedRanking[`best_${level.id}`].user || "-";
+                        row.appendChild(userCell);
+
+                        table.appendChild(row);
+                    });
+
+                    recordsSection.appendChild(table);
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        };
 
     return getRankingData()
-        .then(updateUI)
+        .then(createTable)
         .catch(error => {
             console.error("Nie udało się zapisać przez błąd " + error.message);
         });
 }
 
+function showResult(a){
+
+    let result = document.getElementById("result");
+    let h2 = document.createElement("h2");
+    let p = document.createElement("p");
+
+    result.innerHTML = '';
+    result.style.display = "block"
+
+    switch (a) {
+        case 0:
+            h2.innerText = "Wygrałeś";
+            p.innerText = "Pamiętaj, że jesteś totalnym koksem"
+            break;
+        case 1:
+            h2.innerText = "Wygrałeś";
+            p.innerText = "Ale do najlepszych Ci jeszcze brakuje";
+            break
+        case 2:
+            h2.innerText = "Przegrałeś";
+            p.innerText = "Na przyszłość nie klikaj w bomby";
+            break
+        case 3:
+            h2.innerText = "Przegrałeś";
+            p.innerText = "Pośpiesz się na przyszłość";
+            break;
+        default :
+            h2.innerText = "nie psuj";
+            break
+    }
+    result.appendChild(h2);
+
+    p.setAttribute("style", "text-align: center; margin: 1rem");
+    result.appendChild(p);
+
+
+    result.scrollIntoView({ behavior: 'smooth' });
+}
 
 function showWinnerForm() {
     let win_form = document.getElementById("win_form");
 
-    // Clear any existing content
     win_form.innerHTML = '';
 
-    // Show the form
     win_form.style.display = "block";
 
-    // Add a heading for context
     let heading = document.createElement("h3");
     heading.innerText = "Nowy rekord!";
     win_form.appendChild(heading);
@@ -406,11 +495,12 @@ function showWinnerForm() {
 
     win_form.appendChild(form);
 
-    // Focus on the input field
     setTimeout(() => {
         input_name.focus();
     }, 100);
 }
+
+
 
 //Funkcje tokenu CSRF
 function generateCSRFToken() {

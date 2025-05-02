@@ -211,6 +211,9 @@ body main section table:not(#playField) th {
 body main section table:not(#playField) tr:hover td {
   background-color: #f0f2f5;
 }
+body main section #result p {
+  text-align: center;
+}
 body footer {
   width: 100%;
   display: flex;
